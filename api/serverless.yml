@@ -1,0 +1,26 @@
+service: handle-many-requests
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+       - sqs:SendMessage
+       - sqs:ReceiveMessage
+       - sqs:DeleteMessage
+       - sqs:GetQueueAttributes
+      Resource: arn:aws:sqs:us-east-1:885121665536:WeatherRequestQueue
+
+functions:
+  dequeue:
+    handler: handler.dequeue
+    events:
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:885121665536:WeatherRequestQueue
+          batchSize: 1
+
+  enqueue:
+    handler: handler.enqueue
+    events:
+      - http: GET forecast
