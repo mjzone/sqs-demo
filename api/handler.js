@@ -1,6 +1,5 @@
 'use strict';
 const SQS = require('aws-sdk/clients/sqs');
-const axios = require('axios');
 const sqs = new SQS();
 
 module.exports.dequeue = async (event, context, callback) => {
